@@ -217,6 +217,7 @@ label{
     background:$white;
     border-radius:16px;
     box-sizing:border-box;
+    position:relative;
 }
 
 .swiper {
@@ -348,8 +349,20 @@ label{
 }
 
 .layer_wrap{
-    padding:20px;
-    background:#eee;
+    display:none;
+    position: absolute;
+    width: 80%;
+    box-shadow:0px 0px 8px #ddd;
+    border-radius:16px;
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index:10;
+    overflow:hidden;
+    &.open{
+        display:block;
+    }
     .layer_type{
         background:$white;
         padding:20px;

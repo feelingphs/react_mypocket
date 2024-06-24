@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import './App.scss';
+import { useState } from 'react';
 
 function App() {
   const date = ["1", "2", "3", "4", "5", "6", "7", "28"]
@@ -15,6 +16,9 @@ function App() {
   const itemName = ["GS편의점 도시락", "야간 택시", "전기세", "월급"]
   const itemCategory = ["식비", "교통", "공과금", "월급"]
   const itemPrice = ["- 5,900", "- 9,000", "- 59,000", "+ 400,000"]
+
+  let [layer, setLayer] = useState('')
+
   return (
     <div className="wrap">
       <main className="main" id="main">
@@ -61,11 +65,11 @@ function App() {
                   )
                 })
               }
-              <button className="pocket_add">
+              <button className="pocket_add" onClick={() => {setLayer('open')}}>
                 <span>+</span>
               </button>
             </div>
-            <div className="layer_wrap">
+            <div className={"layer_wrap " + layer}>
               <div className="layer_type">
                 <div className="type_wrap">
                   <button className="type_expenses">
