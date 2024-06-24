@@ -17,7 +17,13 @@ function App() {
   const itemCategory = ["식비", "교통", "공과금", "월급"]
   const itemPrice = ["- 5,900", "- 9,000", "- 59,000", "+ 400,000"]
 
-  let [layer, setLayer] = useState('')
+  const [content, setContent] = useState()
+  const handleClickButton = e => {
+    const { name } = e.target
+    setContent(name)
+  }
+
+  const [layer, setLayer] = useState('')
 
   return (
     <div className="wrap">
@@ -42,9 +48,10 @@ function App() {
                 date.map((date, i) => {
                   return (
                     <SwiperSlide>
-                      <button className="pocket_date">
+                      <button className="pocket_date" onClick={ handleClickButton }>
                         <span className="date">{ date }</span>
                         <span className="week">{ week[i] }</span>
+                        { content }
                       </button>
                     </SwiperSlide>
                   )
