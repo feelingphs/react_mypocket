@@ -29,7 +29,7 @@ function App() {
           </div>
           <div className="">
             <Swiper 
-              className="mySwiper"
+              className="pocket_month"
               slidesPerView={7.5} 
               spaceBetween={16}
               modules={[Navigation]}
