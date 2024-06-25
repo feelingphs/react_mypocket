@@ -447,7 +447,7 @@ label{
     box-sizing: border-box;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(calc(-50% + 0.5px), calc(-50% + 0.5px));
     z-index:10;
     overflow:hidden;
     &.open{
