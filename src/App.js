@@ -95,12 +95,14 @@ function App() {
             <div className={ "layer_wrap " + layer }>
               <div className="layer_type">
                 <div className="type_wrap">
-                  <button className="type_expenses">
-                    <span>지출</span>
-                  </button>
-                  <button className="type_income">
-                    <span>수입</span>
-                  </button>
+                  <div className="radio_wrap">
+                    <input type="radio" id="typeExpenses" name="type"></input>
+                    <label for="typeExpenses">지출</label>
+                  </div>
+                  <div className="radio_wrap">
+                    <input type="radio" id="typeIncome" name="type"></input>
+                    <label for="typeIncome">수입</label>
+                  </div>
                 </div>
                 <div className="dropdown_wrap">
                   <label for="category">카테고리</label>
