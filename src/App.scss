@@ -1,9 +1,62 @@
 // color
 $black:#333;
-$gray:#ccc;
+$gray:#f5f5f5;
 $white:#fff;
+
 $green: #31d532;
 $red:#ff3333;
+
+$blue01:#EBF4F6;
+$blue02:#37B7C3;
+$blue03:#088395;
+$blue04:#071952;
+
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
 
 // mixin
 @mixin hidden() {
@@ -135,14 +188,18 @@ $red:#ff3333;
 
 
 
+
 body{
     background:$black;
 }
-button{
+button, p{
     border:0;
     background:none;
     padding:0;
     margin:0;
+}
+button, a{
+    cursor:pointer;
 }
 
 input{
@@ -213,11 +270,12 @@ label{
 }
 .container{
     width:375px;
-    height:800px;
+    height:auto;
     background:$white;
     border-radius:16px;
     box-sizing:border-box;
     position:relative;
+    overflow:hidden;
 }
 
 .swiper {
@@ -233,7 +291,6 @@ label{
         justify-content: center;
         align-items: center;
     }
-    
     img {
         display: block;
         width: 100%;
@@ -242,32 +299,67 @@ label{
     }
 }
 
-.pocket_date{
-    width:100%;
-    .date{
-        display:block;
-        width:100%;
-        border-radius:12px;
-        background:#f5f5f5;
-        padding:8px 4px;
-        box-sizing:border-box;
-        @include font(1rem, 700, $black, 1.5);
-    }
-    .week{
-        display:block;
-        margin-top:4px;
-        font-size:0.6rem;
-    }
-}
-  
-
-
 .pocket{
-    &_list{
-        border-top:10px solid #ddd;
-        background:#f5f5f5;
+    &_date{
+        width:100%;
+        .date{
+            display:block;
+            width:100%;
+            border-radius:50%;
+            background:$gray;
+            padding:8px 4px;
+            box-sizing:border-box;
+            @include font(1rem, 700, $black, 1);
+            &.on{
+                background:$blue02;
+                @include font(1rem, 700, $white, 1);
+            }
+        }
+        .week{
+            display:block;
+            margin-top:4px;
+            font-size:0.6rem;
+        }
+    }
+    &_summary{
         padding:20px;
-        margin-top:24px;
+        box-sizing:border-box;
+        background:$blue03;
+        margin-bottom:20px;
+    }
+    &_month{
+        @include flex-row(center, start);
+        .current_month{
+            @include font(1rem, 700, $white, 1);
+        }
+    }
+    &_account{
+        margin:20px 0;
+        @include font(1.5rem, 700, $white, 1);
+    }
+    &_report{
+        background:$white;
+        border-radius:8px;
+        box-sizing:border-box;
+        span{
+            @include font(1.5rem, 700, $black, 1);
+        }
+        .expenses{
+            padding:20px;
+            border-bottom:1px solid $gray;
+            @include flex-row(center, between);
+            @include font(0.875rem, 700, $black, 1);
+        }
+        .income{
+            padding:20px;
+            @include flex-row(center, between);
+            @include font(0.875rem, 700, $black, 1);
+        }
+    }
+    &_list{
+        background:$gray;
+        padding:20px;
+        margin-top:20px;
     }
     &_item{
         @include flex-row(center, between);
@@ -333,17 +425,16 @@ label{
     &_add{
         width:100%;
         height:75px;
-        border:1px dashed $gray;
+        border:1px dashed $blue02;
         box-sizing:border-box;
         border-radius:8px;
         text-align:center;
-        background:#eee;
         @include flex-row(center, center);
         span{
             display:block;
             width:40px;
             height:40px;
-            @include font(1.5rem, 400, $gray, 40px);
+            @include font(1.5rem, 400, $blue02, 40px);
         }
     }
 }
@@ -352,7 +443,6 @@ label{
     display:none;
     position: absolute;
     width: 80%;
-    box-shadow:0px 0px 8px #ddd;
     border-radius:16px;
     box-sizing: border-box;
     top: 50%;
@@ -399,6 +489,30 @@ label{
         @include font(0.875rem, 700, $black, 1.5);
     }
 }
+
+.dim{
+    display:none;
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    background:$black;
+    opacity:0.8;
+    z-index:2;
+    &.open{
+        display:block;
+    }
+}
+
+
+
+
+
+
+
+
+
 
 .input_wrap{
     margin-top:16px;

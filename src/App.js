@@ -1,4 +1,4 @@
-//import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 
@@ -7,39 +7,54 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import './App.scss';
-import { useState } from 'react';
+
 
 function App() {
-  const date = ["1", "2", "3", "4", "5", "6", "7", "28"]
-  const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+  //const month = 
+  const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
+  const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
   const type = ["expenses", "expenses", "expenses", "income"]
   const itemName = ["GS편의점 도시락", "야간 택시", "전기세", "월급"]
   const itemCategory = ["식비", "교통", "공과금", "월급"]
   const itemPrice = ["- 5,900", "- 9,000", "- 59,000", "+ 400,000"]
 
-  const [content, setContent] = useState()
+  
+
+  const [pocketList, setPocketList] = useState()
+  const [month, setMonth] = useState(6)
+  const [layer, setLayer] = useState()
+
   const handleClickButton = e => {
     const { name } = e.target
-    setContent(name)
+    const dateDummy = document.querySelectorAll('.date')
+    dateDummy.forEach(element => {
+      element.classList.remove('on');
+    });
+    e.target.classList.add('on')
+    setPocketList(name)
   }
 
-  const [layer, setLayer] = useState('')
+
 
   return (
     <div className="wrap">
       <main className="main" id="main">
         <div className="container">
-          <div className="pocket_summery">
-            <button>2024년 6월</button>
-            <p>97,000원</p>
-            <div>
-              <p>지출<span>3,000원</span></p>
-              <p>수입<span>100,000원</span></p>
+          <div className="pocket_summary">
+            <div className="pocket_month">
+              <button className="prev" onClick={ () => { setMonth( month - 1 )}}>이전달</button>
+              <div className="current_month">2024년 { month }월</div>
+              <button className="next" onClick={ () => { setMonth( month + 1 )}}>다음달</button>
+            </div>
+            <p className="pocket_account">97,000 원</p>
+            <div className="pocket_report">
+              <p className="expenses">지출<span>3,000 원</span></p>
+              <p className="income">수입<span>100,000 원</span></p>
             </div>
           </div>
           <div className="">
             <Swiper 
-              className="pocket_month"
+              className="date_wrap"
               slidesPerView={7.5} 
               spaceBetween={16}
               modules={[Navigation]}
@@ -47,22 +62,23 @@ function App() {
               {
                 date.map((date, i) => {
                   return (
-                    <SwiperSlide>
+                    <SwiperSlide key={ i }>
                       <button className="pocket_date" onClick={ handleClickButton }>
                         <span className="date">{ date }</span>
                         <span className="week">{ week[i] }</span>
-                        { content }
                       </button>
                     </SwiperSlide>
                   )
                 })
               }
             </Swiper>
+
+            { pocketList }
             <div className="pocket_list">
               {
                 itemName.map((itemName, i) => {
                   return(
-                    <button className={ "pocket_item " + type[i] }>
+                    <button className={ "pocket_item " + type[i] } key={ i }>
                       <div className="item_info">
                         <span className="item_name">{ itemName }</span>
                         <span className="item_category">{ itemCategory[i] }</span>
@@ -76,7 +92,7 @@ function App() {
                 <span>+</span>
               </button>
             </div>
-            <div className={"layer_wrap " + layer}>
+            <div className={ "layer_wrap " + layer }>
               <div className="layer_type">
                 <div className="type_wrap">
                   <button className="type_expenses">
@@ -107,6 +123,7 @@ function App() {
                 </div>
               </div>
             </div>
+            <div className={ "dim " + layer }></div>
           </div>
         </div>
       </main>
