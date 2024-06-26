@@ -13,10 +13,13 @@ function App() {
   //const month = 
   const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
   const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
-  const type = ["expenses", "expenses", "expenses", "income"]
-  const itemName = ["GS편의점 도시락", "야간 택시", "전기세", "월급"]
-  const itemCategory = ["식비", "교통", "공과금", "월급"]
-  const itemPrice = ["- 5,900", "- 9,000", "- 59,000", "+ 400,000"]
+
+  const [pocketData, setPocketData] = useState([
+    {id:1, type:"expenses", name:"GS편의점 도시락", category:"식비", price:"- 5,900"},
+    {id:2, type:"expenses", name:"야간 택시", category:"교통", price:"- 9,000"},
+    {id:3, type:"expenses", name:"전기세", category:"공과금", price:"- 59,000"},
+    {id:4, type:"income", name:"월급", category:"월급", price:"- 400,000"},
+  ])
 
   
 
@@ -32,6 +35,10 @@ function App() {
     });
     e.target.classList.add('on')
     setPocketList(name)
+  }
+
+  const handleDataPush = () => {
+
   }
 
 
@@ -76,14 +83,14 @@ function App() {
             { pocketList }
             <div className="pocket_list">
               {
-                itemName.map((itemName, i) => {
+                pocketData.map((data, i) => {
                   return(
-                    <button className={ "pocket_item " + type[i] } key={ i }>
+                    <button className={ "pocket_item " + data.type } key={ i }>
                       <div className="item_info">
-                        <span className="item_name">{ itemName }</span>
-                        <span className="item_category">{ itemCategory[i] }</span>
+                        <span className="item_name">{ data.name }</span>
+                        <span className="item_category">{ data.category }</span>
                       </div>
-                      <div className="item_price">{ itemPrice[i] }원</div>
+                      <div className="item_price">{ data.price }원</div>
                     </button>
                   )
                 })
@@ -96,11 +103,11 @@ function App() {
               <div className="layer_type">
                 <div className="type_wrap">
                   <div className="radio_wrap">
-                    <input type="radio" id="typeExpenses" name="type"></input>
+                    <input type="radio" id="typeExpenses" name="type" value={}></input>
                     <label for="typeExpenses">지출</label>
                   </div>
                   <div className="radio_wrap">
-                    <input type="radio" id="typeIncome" name="type"></input>
+                    <input type="radio" id="typeIncome" name="type" value={}></input>
                     <label for="typeIncome">수입</label>
                   </div>
                 </div>
@@ -121,7 +128,7 @@ function App() {
                   <input type="number" className="input_item_price" id="input_item_price" placeholder="30,000"></input>
                 </div>
                 <div className="button_wrap">
-                  <button className="button"><span>확인</span></button>
+                  <button className="button" onClick={ handleDataPush }><span>확인</span></button>
                 </div>
               </div>
             </div>
