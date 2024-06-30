@@ -37,7 +37,13 @@ function App() {
     setPocketList(name)
   }
 
-  const handleDataPush = () => {
+  const [price, setPrice] = useState();
+  const [name, setName] = useState();
+
+  const handleDataPush = e => {
+    let copy = [...pocketData];
+    copy.push(pocketData.type, pocketData.price, pocketData.name);
+    setPocketData(copy)
 
   }
 
@@ -103,11 +109,11 @@ function App() {
               <div className="layer_type">
                 <div className="type_wrap">
                   <div className="radio_wrap">
-                    <input type="radio" id="typeExpenses" name="type" value={}></input>
+                    <input type="radio" id="typeExpenses" name="type"></input>
                     <label for="typeExpenses">지출</label>
                   </div>
                   <div className="radio_wrap">
-                    <input type="radio" id="typeIncome" name="type" value={}></input>
+                    <input type="radio" id="typeIncome" name="type"></input>
                     <label for="typeIncome">수입</label>
                   </div>
                 </div>
@@ -121,11 +127,11 @@ function App() {
                 </div>
                 <div className="input_wrap">
                   <label for="input_item_name">내역</label>
-                  <input type="text" className="input_item_name" id="input_item_name" placeholder="장보기"></input>
+                  <input type="text" className="input_item_name" id="input_item_name" placeholder="장보기" onChange={(e) => { setName(e.target.value) }}></input>
                 </div>
                 <div className="input_wrap">
                   <label for="input_item_price">금액</label>
-                  <input type="number" className="input_item_price" id="input_item_price" placeholder="30,000"></input>
+                  <input type="number" className="input_item_price" id="input_item_price" placeholder="30,000" onChange={(e) => { setPrice(e.target.value) }}></input>
                 </div>
                 <div className="button_wrap">
                   <button className="button" onClick={ handleDataPush }><span>확인</span></button>
