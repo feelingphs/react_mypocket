@@ -18,7 +18,7 @@ function App() {
     {id:1, type:"expenses", name:"GS편의점 도시락", category:"식비", price:"- 5,900"},
     {id:2, type:"expenses", name:"야간 택시", category:"교통", price:"- 9,000"},
     {id:3, type:"expenses", name:"전기세", category:"공과금", price:"- 59,000"},
-    {id:4, type:"income", name:"월급", category:"월급", price:"- 400,000"},
+    {id:4, type:"income", name:"월급", category:"월급", price:"+ 400,000"},
   ])
 
   
@@ -37,12 +37,30 @@ function App() {
     setPocketList(name)
   }
 
-  const [price, setPrice] = useState();
+  const [type, setType] = useState();
   const [name, setName] = useState();
+  const [category, setCategory] = useState();
+  const [price, setPrice] = useState();
 
-  const handleDataPush = e => {
+  const handleDataPush = (e) => {
     let copy = [...pocketData];
-    copy.push(pocketData.type, pocketData.price, pocketData.name);
+    const obj = {
+      id:5,
+      type: type,
+      name:name,
+      category:category,
+      price:price,
+      typeCheck: function() {
+        if(this.type === "0"){
+          setPrice( "+" + this.price);
+        } else {
+          return "-" + this.price;
+        }
+      }
+    }
+    obj.typeCheck();
+
+    copy.push(obj);
     setPocketData(copy)
 
   }
@@ -109,20 +127,20 @@ function App() {
               <div className="layer_type">
                 <div className="type_wrap">
                   <div className="radio_wrap">
-                    <input type="radio" id="typeExpenses" name="type"></input>
+                    <input type="radio" id="typeExpenses" name="type" value="0" onChange={(e) => { setType(e.target.value) }}></input>
                     <label for="typeExpenses">지출</label>
                   </div>
                   <div className="radio_wrap">
-                    <input type="radio" id="typeIncome" name="type"></input>
+                    <input type="radio" id="typeIncome" name="type" value="1" onChange={(e) => { setType(e.target.value) }}></input>
                     <label for="typeIncome">수입</label>
                   </div>
                 </div>
                 <div className="dropdown_wrap">
                   <label for="category">카테고리</label>
-                  <select id="category">
-                    <option value="food">식비</option>
-                    <option value="transortation">교통</option>
-                    <option value="dues">공과금</option>
+                  <select id="category" onChange={(e) => { setCategory(e.target.value) }}>
+                    <option value="0">식비</option>
+                    <option value="1">교통</option>
+                    <option value="2">공과금</option>
                   </select>
                 </div>
                 <div className="input_wrap">
