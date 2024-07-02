@@ -37,6 +37,7 @@ function App() {
     setPocketList(name)
   }
 
+  const {id} = "";
   const [type, setType] = useState();
   const [name, setName] = useState();
   const [category, setCategory] = useState();
@@ -45,20 +46,27 @@ function App() {
   const handleDataPush = (e) => {
     let copy = [...pocketData];
     const obj = {
-      id:5,
+      id:id,
+      inputId: function() {
+        this.id = pocketData[pocketData.length - 1].id + 1;
+        console.log(this.id);
+      },
       type: type,
       name:name,
       category:category,
       price:price,
-      typeCheck: function() {
+      priceCheck: function() {
         if(this.type === "0"){
-          setPrice( "+" + this.price);
+          this.type = "expenses";
+          this.price = "-" + this.price
         } else {
-          return "-" + this.price;
+          this.type = "income";
+          this.price = "+" + this.price
         }
       }
     }
-    obj.typeCheck();
+    obj.priceCheck();
+    obj.inputId();
 
     copy.push(obj);
     setPocketData(copy)
