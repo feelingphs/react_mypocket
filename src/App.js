@@ -14,14 +14,18 @@ function App() {
   const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
   const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
 
+  
   const [pocketData, setPocketData] = useState([
     {id:1, type:"expenses", name:"GS편의점 도시락", category:"식비", price:"- 5,900"},
     {id:2, type:"expenses", name:"야간 택시", category:"교통", price:"- 9,000"},
     {id:3, type:"expenses", name:"전기세", category:"공과금", price:"- 59,000"},
     {id:4, type:"income", name:"월급", category:"월급", price:"+ 400,000"},
   ])
-
   
+  
+  const expCategoryOption = ["식비", "교통", "공과금", "대출"]
+  const inCategoryOption = ["월급", "용돈", "캐시백", "이자"]
+  const [categoryOption, setCategoryOption] = useState();
 
   const [pocketList, setPocketList] = useState()
   const [month, setMonth] = useState(6)
@@ -58,10 +62,10 @@ function App() {
       priceCheck: function() {
         if(this.type === "0"){
           this.type = "expenses";
-          this.price = "-" + this.price
+          this.price = "- " + this.price
         } else {
           this.type = "income";
-          this.price = "+" + this.price
+          this.price = "+ " + this.price
         }
       }
     }
@@ -71,6 +75,29 @@ function App() {
     copy.push(obj);
     setPocketData(copy)
 
+  }
+
+  const handleChangeRadio = (e) => {
+    setType(e.target.value)
+    
+    if(e.target.value === "0"){
+      setCategoryOption(
+        expCategoryOption.map((data, i) => {
+          return (
+            <option value={ data }>{ data }</option>
+          )
+        })
+      )
+    } else {
+      setCategoryOption(
+        inCategoryOption.map((data, i) => {
+          return (
+            <option value={ data }>{ data }</option>
+          )
+        })
+
+      )
+    }
   }
 
 
@@ -135,20 +162,18 @@ function App() {
               <div className="layer_type">
                 <div className="type_wrap">
                   <div className="radio_wrap">
-                    <input type="radio" id="typeExpenses" name="type" value="0" onChange={(e) => { setType(e.target.value) }}></input>
+                    <input type="radio" id="typeExpenses" name="type" defaultValue={"0"} value="0" onChange={ handleChangeRadio }></input>
                     <label for="typeExpenses">지출</label>
                   </div>
                   <div className="radio_wrap">
-                    <input type="radio" id="typeIncome" name="type" value="1" onChange={(e) => { setType(e.target.value) }}></input>
+                    <input type="radio" id="typeIncome" name="type" value="1" onChange={ handleChangeRadio }></input>
                     <label for="typeIncome">수입</label>
                   </div>
                 </div>
                 <div className="dropdown_wrap">
                   <label for="category">카테고리</label>
-                  <select id="category" onChange={(e) => { setCategory(e.target.value) }}>
-                    <option value="0">식비</option>
-                    <option value="1">교통</option>
-                    <option value="2">공과금</option>
+                  <select id="category" onChange={ (e) => { setCategory(e.target.value); }}>
+                    { categoryOption }
                   </select>
                 </div>
                 <div className="input_wrap">
