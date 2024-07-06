@@ -6,11 +6,14 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+// components
+import Layer from './components/Layer';
+
+// scss
 import './App.scss';
 
 
 function App() {
-  //const month = 
   const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
   const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
 
@@ -21,25 +24,21 @@ function App() {
     {id:3, type:"expenses", name:"전기세", category:"공과금", price:"- 59,000"},
     {id:4, type:"income", name:"월급", category:"월급", price:"+ 400,000"},
   ])
-  
-  
-  const expCategoryOption = ["식비", "교통", "공과금", "대출"]
-  const inCategoryOption = ["월급", "용돈", "캐시백", "이자"]
-  const [categoryOption, setCategoryOption] = useState();
 
   const [pocketList, setPocketList] = useState()
   const [month, setMonth] = useState(6)
-  const [layer, setLayer] = useState()
+  const [layer, setLayer] = useState(false)
 
   const handleClickButton = e => {
     const { name } = e.target
     const dateDummy = document.querySelectorAll('.date')
     dateDummy.forEach(element => {
-      element.classList.remove('on');
+        element.classList.remove('on');
     });
     e.target.classList.add('on')
     setPocketList(name)
   }
+
 
   const {id} = "";
   const [type, setType] = useState();
@@ -76,30 +75,6 @@ function App() {
     setPocketData(copy)
 
   }
-
-  const handleChangeRadio = (e) => {
-    setType(e.target.value)
-    
-    if(e.target.value === "0"){
-      setCategoryOption(
-        expCategoryOption.map((data, i) => {
-          return (
-            <option value={ data }>{ data }</option>
-          )
-        })
-      )
-    } else {
-      setCategoryOption(
-        inCategoryOption.map((data, i) => {
-          return (
-            <option value={ data }>{ data }</option>
-          )
-        })
-
-      )
-    }
-  }
-
 
 
   return (
@@ -154,42 +129,17 @@ function App() {
                   )
                 })
               }
-              <button className="pocket_add" onClick={() => {setLayer('open')}}>
+              <button className="pocket_add" onClick={() => {setLayer(true)}}>
                 <span>+</span>
               </button>
             </div>
-            <div className={ "layer_wrap " + layer }>
-              <div className="layer_type">
-                <div className="type_wrap">
-                  <div className="radio_wrap">
-                    <input type="radio" id="typeExpenses" name="type" defaultValue={"0"} value="0" onChange={ handleChangeRadio }></input>
-                    <label for="typeExpenses">지출</label>
-                  </div>
-                  <div className="radio_wrap">
-                    <input type="radio" id="typeIncome" name="type" value="1" onChange={ handleChangeRadio }></input>
-                    <label for="typeIncome">수입</label>
-                  </div>
-                </div>
-                <div className="dropdown_wrap">
-                  <label for="category">카테고리</label>
-                  <select id="category" onChange={ (e) => { setCategory(e.target.value); }}>
-                    { categoryOption }
-                  </select>
-                </div>
-                <div className="input_wrap">
-                  <label for="input_item_name">내역</label>
-                  <input type="text" className="input_item_name" id="input_item_name" placeholder="장보기" onChange={(e) => { setName(e.target.value) }}></input>
-                </div>
-                <div className="input_wrap">
-                  <label for="input_item_price">금액</label>
-                  <input type="number" className="input_item_price" id="input_item_price" placeholder="30,000" onChange={(e) => { setPrice(e.target.value) }}></input>
-                </div>
-                <div className="button_wrap">
-                  <button className="button" onClick={ handleDataPush }><span>확인</span></button>
-                </div>
-              </div>
-            </div>
-            <div className={ "dim " + layer }></div>
+            {layer === true ?
+              <>
+                <Layer></Layer>
+                <div className="dim"></div>
+              </>
+              : null
+            }
           </div>
         </div>
       </main>
