@@ -1,5 +1,6 @@
 // color
 $black:#333;
+$black02:#888;
 $gray:#f5f5f5;
 $white:#fff;
 
@@ -10,6 +11,10 @@ $blue01:#EBF4F6;
 $blue02:#37B7C3;
 $blue03:#088395;
 $blue04:#071952;
+
+$breakpoint-mobile:768px;
+$breakpoint-tablet:1024px;
+$breakpoint-desktop:1281px;
 
 
 
@@ -312,13 +317,22 @@ label{
     justify-content:center;
 }
 .container{
-    width:375px;
+    width:100%;
     height:auto;
     background:$white;
     border-radius:16px;
     box-sizing:border-box;
     position:relative;
     overflow:hidden;
+    @include desktop() {
+        max-width:750px;
+    }
+}
+
+.content{
+    width:100%;
+    max-height:100vh;
+    overflow:auto;
 }
 
 .swiper {
@@ -347,10 +361,12 @@ label{
         width:100%;
         .date{
             display:block;
-            width:100%;
+            width:32px;
+            height:32px;
             border-radius:50%;
             background:$gray;
             padding:8px 4px;
+            margin:0 auto;
             box-sizing:border-box;
             @include font(1rem, 700, $black, 1);
             &.on{
@@ -458,7 +474,7 @@ label{
             display:block;
             margin-top:4px;
             text-align:left;
-            @include font(0.75rem, 400, $black, 1.5);
+            @include font(0.75rem, 400, $black02, 1.5);
         }
         .item_price{
             width:30%;

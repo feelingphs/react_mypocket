@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 
@@ -17,7 +17,16 @@ function App() {
   const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
   const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
 
-  
+  const [pocketList, setPocketList] = useState()
+
+  const {id} = "";
+  const [month, setMonth] = useState(6)
+  const [incomeTotal, setIncomeTotal] = useState()
+  const [expenseTotal, setExpenseTotal] = useState()
+  const [total, setTotal] = useState()
+  const [layer, setLayer] = useState(false)
+
+  // 수입, 지출 목록
   const [pocketData, setPocketData] = useState([
     {id:1, type:"expenses", name:"GS편의점 도시락", category:"식비", price:"- 5,900"},
     {id:2, type:"expenses", name:"야간 택시", category:"교통", price:"- 9,000"},
@@ -25,10 +34,7 @@ function App() {
     {id:4, type:"income", name:"월급", category:"월급", price:"+ 400,000"},
   ])
 
-  const [pocketList, setPocketList] = useState()
-  const [month, setMonth] = useState(6)
-  const [layer, setLayer] = useState(false)
-
+  // 날짜 선택시 날짜 활성화
   const handleClickButton = e => {
     const { name } = e.target
     const dateDummy = document.querySelectorAll('.date')
@@ -39,25 +45,19 @@ function App() {
     setPocketList(name)
   }
 
-
-  const {id} = "";
-  const [type, setType] = useState();
-  const [name, setName] = useState();
-  const [category, setCategory] = useState();
-  const [price, setPrice] = useState();
-
-  const handleDataPush = (e) => {
+  // 수입, 지출 목록 데이터 추가
+  const handleDataPush = (data) => {
+    console.log(data.type, data.name, data.category, data.price);
     let copy = [...pocketData];
     const obj = {
       id:id,
       inputId: function() {
         this.id = pocketData[pocketData.length - 1].id + 1;
-        console.log(this.id);
       },
-      type: type,
-      name:name,
-      category:category,
-      price:price,
+      type: data.type,
+      name: data.name,
+      category: data.category,
+      price: data.price,
       priceCheck: function() {
         if(this.type === "0"){
           this.type = "expenses";
@@ -72,28 +72,43 @@ function App() {
     obj.inputId();
 
     copy.push(obj);
-    setPocketData(copy)
-
+    setPocketData(copy);
+    setLayer(false);
   }
 
+
+  useEffect( () => {
+    setIncomeTotal( pocketData[0].price );
+    setExpenseTotal("0");
+
+    Object.keys(pocketData).forEach(function(key) {
+      console.log(pocketData[key]);
+      // if(key == 'expenses'){
+      //   console.log('y');
+      // } else {
+      //   console.log('n');
+      // }
+    })
+
+  }, [total])
 
   return (
     <div className="wrap">
       <main className="main" id="main">
         <div className="container">
-          <div className="pocket_summary">
-            <div className="pocket_month">
-              <button className="prev" onClick={ () => { setMonth( month - 1 )}}>이전달</button>
-              <div className="current_month">2024년 { month }월</div>
-              <button className="next" onClick={ () => { setMonth( month + 1 )}}>다음달</button>
+          <div className="content">
+            <div className="pocket_summary">
+              <div className="pocket_month">
+                <button className="prev" onClick={ () => { setMonth( month - 1 )}}>이전달</button>
+                <div className="current_month">2024년 { month }월</div>
+                <button className="next" onClick={ () => { setMonth( month + 1 )}}>다음달</button>
+              </div>
+              <p className="pocket_account">{ total } 원</p>
+              <div className="pocket_report">
+                <p className="expenses">지출<span>{ expenseTotal } 원</span></p>
+                <p className="income">수입<span>{ incomeTotal } 원</span></p>
+              </div>
             </div>
-            <p className="pocket_account">97,000 원</p>
-            <div className="pocket_report">
-              <p className="expenses">지출<span>3,000 원</span></p>
-              <p className="income">수입<span>100,000 원</span></p>
-            </div>
-          </div>
-          <div className="">
             <Swiper 
               className="date_wrap"
               slidesPerView={7.5} 
@@ -135,12 +150,13 @@ function App() {
             </div>
             {layer === true ?
               <>
-                <Layer></Layer>
+                <Layer handleDataPush={handleDataPush}></Layer>
                 <div className="dim"></div>
               </>
               : null
             }
           </div>
+          
         </div>
       </main>
     </div>
