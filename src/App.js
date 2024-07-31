@@ -14,6 +14,9 @@ import './App.scss';
 
 
 function App() {
+  const minMonth = 1;
+  const maxMonth = 12;
+
   const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
   const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
 
@@ -23,15 +26,15 @@ function App() {
   const [month, setMonth] = useState(6)
   const [incomeTotal, setIncomeTotal] = useState()
   const [expenseTotal, setExpenseTotal] = useState()
-  const [total, setTotal] = useState()
   const [layer, setLayer] = useState(false)
 
   // 수입, 지출 목록
   const [pocketData, setPocketData] = useState([
-    {id:1, type:"expenses", name:"GS편의점 도시락", category:"식비", price:"- 5,900"},
-    {id:2, type:"expenses", name:"야간 택시", category:"교통", price:"- 9,000"},
-    {id:3, type:"expenses", name:"전기세", category:"공과금", price:"- 59,000"},
-    {id:4, type:"income", name:"월급", category:"월급", price:"+ 400,000"},
+    {id:1, type:"expenses", name:"GS편의점 도시락", category:"식비", price:"1000"},
+    {id:2, type:"expenses", name:"야간 택시", category:"교통", price:"1000"},
+    {id:3, type:"expenses", name:"전기세", category:"공과금", price:"1000"},
+    {id:4, type:"income", name:"월급", category:"월급", price:"1000"},
+    {id:4, type:"income", name:"월급", category:"월급", price:"1000"},
   ])
 
   // 날짜 선택시 날짜 활성화
@@ -61,10 +64,10 @@ function App() {
       priceCheck: function() {
         if(this.type === "0"){
           this.type = "expenses";
-          this.price = "- " + this.price
+          //this.price = "- " + this.price
         } else {
           this.type = "income";
-          this.price = "+ " + this.price
+          //this.price = "+ " + this.price
         }
       }
     }
@@ -76,21 +79,63 @@ function App() {
     setLayer(false);
   }
 
-
-  useEffect( () => {
-    setIncomeTotal( pocketData[0].price );
-    setExpenseTotal("0");
-
-    Object.keys(pocketData).forEach(function(key) {
-      console.log(pocketData[key]);
-      // if(key == 'expenses'){
-      //   console.log('y');
-      // } else {
-      //   console.log('n');
-      // }
+  // 월 증가
+  const monthIncrease = () => {
+    setMonth((month) => {
+      if(month < maxMonth) {
+        return month + 1;
+      } else {
+        return month;
+      }
     })
+  }
+  
+  // 월 감소
+  const monthDecrease = () => {
+    setMonth((month) => {
+      if(month > minMonth) {
+        return month - 1;
+      } else if (month === minMonth){
+        return month;
+      }
+    })
+  }
 
-  }, [total])
+  // 금액 숫자로 전환
+  const formatNumber = (num) => {
+    if (num !== undefined && num !== null && !isNaN(num)) {
+      num = Number(num);
+      return num.toLocaleString('ko-KR');
+    } else {
+      return 'Invalid number';
+    }
+  }
+
+  // 전체 수입 금액
+  useEffect( () => {
+    let price = 0;
+    Object.keys(pocketData).forEach(function(key) {
+      const pocketType = pocketData[key].type;
+      if(pocketType === 'income') {
+        const pocketPrice = pocketData[key].price;
+        price += Number(pocketPrice);
+        setIncomeTotal(price);
+      }
+    })
+  }, [pocketData])
+
+  // 전체 지출 금액
+  useEffect( () => {
+    let price = 0;
+    Object.keys(pocketData).forEach(function(key) {
+      const pocketType = pocketData[key].type;
+      if(pocketType === 'expenses'){
+        const pocketPrice = pocketData[key].price;
+        price += Number(pocketPrice);
+        setExpenseTotal(price);
+      }
+    })
+  }, [pocketData])
 
   return (
     <div className="wrap">
@@ -99,14 +144,14 @@ function App() {
           <div className="content">
             <div className="pocket_summary">
               <div className="pocket_month">
-                <button className="prev" onClick={ () => { setMonth( month - 1 )}}>이전달</button>
+                <button className="prev" onClick={ () => { monthDecrease() }}>이전달</button>
                 <div className="current_month">2024년 { month }월</div>
-                <button className="next" onClick={ () => { setMonth( month + 1 )}}>다음달</button>
+                <button className="next" onClick={ () => { monthIncrease() }}>다음달</button>
               </div>
-              <p className="pocket_account">{ total } 원</p>
+              <p className="pocket_account">{ incomeTotal - expenseTotal } 원</p>
               <div className="pocket_report">
-                <p className="expenses">지출<span>{ expenseTotal } 원</span></p>
-                <p className="income">수입<span>{ incomeTotal } 원</span></p>
+                <p className="expenses">지출<span>{ formatNumber(expenseTotal) } 원</span></p>
+                <p className="income">수입<span>{ formatNumber(incomeTotal) } 원</span></p>
               </div>
             </div>
             <Swiper 
@@ -139,7 +184,7 @@ function App() {
                         <span className="item_name">{ data.name }</span>
                         <span className="item_category">{ data.category }</span>
                       </div>
-                      <div className="item_price">{ data.price }원</div>
+                      <div className="item_price">{ formatNumber(data.price) } 원</div>
                     </button>
                   )
                 })
