@@ -148,7 +148,7 @@ function App() {
                 <div className="current_month">2024년 { month }월</div>
                 <button className="next" onClick={ () => { monthIncrease() }}>다음달</button>
               </div>
-              <p className="pocket_account">{ incomeTotal - expenseTotal } 원</p>
+              <p className="pocket_account">{ formatNumber(incomeTotal - expenseTotal) } 원</p>
               <div className="pocket_report">
                 <p className="expenses">지출<span>{ formatNumber(expenseTotal) } 원</span></p>
                 <p className="income">수입<span>{ formatNumber(incomeTotal) } 원</span></p>
