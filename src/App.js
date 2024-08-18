@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+
+import { format, addMonths, eachDayOfInterval, startOfMonth, endOfMonth, subMonths, isToday } from 'date-fns';
+
 
 // Import Swiper styles
 import 'swiper/css';
@@ -14,16 +17,9 @@ import './App.scss';
 
 
 function App() {
-  const minMonth = 1;
-  const maxMonth = 12;
-
-  const date = ["1", "2", "3", "4", "5", "28", "29", "30"]
-  const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN", "MON"]
-
   const [pocketList, setPocketList] = useState()
 
   const {id} = "";
-  const [month, setMonth] = useState(6)
   const [incomeTotal, setIncomeTotal] = useState()
   const [expenseTotal, setExpenseTotal] = useState()
   const [layer, setLayer] = useState(false)
@@ -36,17 +32,6 @@ function App() {
     {id:4, type:"income", name:"월급", category:"월급", price:"1000"},
     {id:4, type:"income", name:"월급", category:"월급", price:"1000"},
   ])
-
-  // 날짜 선택시 날짜 활성화
-  const handleClickButton = e => {
-    const { name } = e.target
-    const dateDummy = document.querySelectorAll('.date')
-    dateDummy.forEach(element => {
-        element.classList.remove('on');
-    });
-    e.target.classList.add('on')
-    setPocketList(name)
-  }
 
   // 수입, 지출 목록 데이터 추가
   const handleDataPush = (data) => {
@@ -64,10 +49,8 @@ function App() {
       priceCheck: function() {
         if(this.type === "0"){
           this.type = "expenses";
-          //this.price = "- " + this.price
         } else {
           this.type = "income";
-          //this.price = "+ " + this.price
         }
       }
     }
@@ -77,28 +60,6 @@ function App() {
     copy.push(obj);
     setPocketData(copy);
     setLayer(false);
-  }
-
-  // 월 증가
-  const monthIncrease = () => {
-    setMonth((month) => {
-      if(month < maxMonth) {
-        return month + 1;
-      } else {
-        return month;
-      }
-    })
-  }
-  
-  // 월 감소
-  const monthDecrease = () => {
-    setMonth((month) => {
-      if(month > minMonth) {
-        return month - 1;
-      } else if (month === minMonth){
-        return month;
-      }
-    })
   }
 
   // 금액 숫자로 전환
@@ -137,6 +98,41 @@ function App() {
     })
   }, [pocketData])
 
+  // 캘린더
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const monthStart = startOfMonth(currentDate);
+  const monthEnd = endOfMonth(currentDate);
+
+  const nextMonthHandler = useCallback(() => {
+    setCurrentDate(addMonths(currentDate, 1));
+    removeActive();
+  }, [currentDate])
+  const prevMonthHandler = useCallback(() => {
+    setCurrentDate(subMonths(currentDate, 1));
+    removeActive();
+  }, [currentDate])
+  const days = eachDayOfInterval({
+    start:monthStart,
+    end:monthEnd,
+  })
+
+  // 날짜 선택시 날짜 활성화
+  const handleClickButton = e => {
+    const { name } = e.target
+    removeActive();
+    e.target.classList.add('on')
+    setPocketList(name)
+  }
+  
+  //날짜 비활성화
+  const removeActive = () => {
+    const dateDummy = document.querySelectorAll('.date')
+    dateDummy.forEach(element => {
+        element.classList.remove('on');
+    });
+  }
+
+
   return (
     <div className="wrap">
       <main className="main" id="main">
@@ -144,9 +140,9 @@ function App() {
           <div className="content">
             <div className="pocket_summary">
               <div className="pocket_month">
-                <button className="prev" onClick={ () => { monthDecrease() }}>이전달</button>
-                <div className="current_month">2024년 { month }월</div>
-                <button className="next" onClick={ () => { monthIncrease() }}>다음달</button>
+                <button className="prev" onClick={ prevMonthHandler }>이전달</button>
+                <div className="current_month">{format(currentDate, "yyyy년")} {format(currentDate, "M월")}</div>
+                <button className="next" onClick={ nextMonthHandler }>다음달</button>
               </div>
               <p className="pocket_account">{ formatNumber(incomeTotal - expenseTotal) } 원</p>
               <div className="pocket_report">
@@ -161,12 +157,12 @@ function App() {
               modules={[Navigation]}
             >
               {
-                date.map((date, i) => {
+                days.map((date, i) => {
                   return (
                     <SwiperSlide key={ i }>
                       <button className="pocket_date" onClick={ handleClickButton }>
-                        <span className="date">{ date }</span>
-                        <span className="week">{ week[i] }</span>
+                        <span className={`date ${isToday(date) ? 'on' : ''}`}>{format(date, "d")}</span>
+                        <span className="week">{format(date, "eee")}</span>
                       </button>
                     </SwiperSlide>
                   )
