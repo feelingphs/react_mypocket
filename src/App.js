@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { A11y, Navigation } from 'swiper/modules';
 
 import { format, addMonths, eachDayOfInterval, startOfMonth, endOfMonth, subMonths, isToday } from 'date-fns';
 
@@ -10,6 +10,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 // components
+import PocketList from './components/PocketList';
 import Layer from './components/Layer';
 
 // scss
@@ -17,7 +18,7 @@ import './App.scss';
 
 
 function App() {
-  const [pocketList, setPocketList] = useState()
+  // const [pocketList, setPocketList] = useState()
 
   const {id} = "";
   const [incomeTotal, setIncomeTotal] = useState()
@@ -118,10 +119,42 @@ function App() {
 
   // 날짜 선택시 날짜 활성화
   const handleClickButton = e => {
-    const { name } = e.target
+    //const { name } = e.target
     removeActive();
     e.target.classList.add('on')
-    setPocketList(name)
+    //setPocketList(name)
+
+    const dateWrap = document.querySelector('.date_wrap');
+    const targetRect = e.target.getBoundingClientRect();
+    const boxHalf = dateWrap.clientWidth / 2;
+    let pos;
+    let listWidth = 0;
+
+    document.querySelectorAll('.snbSwiper .swiper-wrapper .swiper-slide').forEach(function (slide) {
+      listWidth += slide.offsetWidth;
+    });
+  
+    const selectTargetPos = targetRect.left - dateWrap.getBoundingClientRect().left + e.target.offsetWidth / 2;
+  
+    if (selectTargetPos <= boxHalf) {
+      // left
+      pos = 0;
+    } else if (listWidth - selectTargetPos <= boxHalf) {
+      // right
+      pos = listWidth - dateWrap.clientWidth;
+    } else {
+      pos = selectTargetPos - boxHalf;
+    }
+
+    	// 애니메이션 적용
+    setTimeout(function () {
+      dateWrap.style.transform = 'translateX(' + pos * -1 + 'px)';
+      dateWrap.style.transitionDuration = '500ms';
+    }, 200);
+
+    // https://codepen.io/henny1105/pen/wvOyoWJ
+
+    console.log(targetRect)
   }
   
   //날짜 비활성화
@@ -132,6 +165,12 @@ function App() {
     });
   }
 
+  // const dateMoveCenter = e => {
+  //   const dateWrap = document.querySelector('.date_wrap');
+  //   const targetRect = e.target.getBoundingClientRect();
+
+  //   console.log(targetRect)
+  // }
 
   return (
     <div className="wrap">
@@ -154,7 +193,7 @@ function App() {
               className="date_wrap"
               slidesPerView={7.5} 
               spaceBetween={16}
-              modules={[Navigation]}
+              modules={[Navigation, A11y]}
             >
               {
                 days.map((date, i) => {
@@ -170,25 +209,8 @@ function App() {
               }
             </Swiper>
 
-            { pocketList }
-            <div className="pocket_list">
-              {
-                pocketData.map((data, i) => {
-                  return(
-                    <button className={ "pocket_item " + data.type } key={ i }>
-                      <div className="item_info">
-                        <span className="item_name">{ data.name }</span>
-                        <span className="item_category">{ data.category }</span>
-                      </div>
-                      <div className="item_price">{ formatNumber(data.price) } 원</div>
-                    </button>
-                  )
-                })
-              }
-              <button className="pocket_add" onClick={() => {setLayer(true)}}>
-                <span>+</span>
-              </button>
-            </div>
+            <PocketList pocketData={pocketData} formatNumber={formatNumber} setLayer={setLayer}></PocketList>
+            
             {layer === true ?
               <>
                 <Layer handleDataPush={handleDataPush}></Layer>
