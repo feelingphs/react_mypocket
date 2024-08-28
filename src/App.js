@@ -117,6 +117,7 @@ function App() {
     end:monthEnd,
   })
 
+  let pos = 0;
   // 날짜 선택시 날짜 활성화
   const handleClickButton = e => {
     //const { name } = e.target
@@ -125,36 +126,44 @@ function App() {
     //setPocketList(name)
 
     const dateWrap = document.querySelector('.date_wrap');
+    const swiperWrapper = document.querySelector('.date_wrap .swiper-wrapper');
     const targetRect = e.target.getBoundingClientRect();
     const boxHalf = dateWrap.clientWidth / 2;
-    let pos;
     let listWidth = 0;
 
-    document.querySelectorAll('.snbSwiper .swiper-wrapper .swiper-slide').forEach(function (slide) {
+    document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
       listWidth += slide.offsetWidth;
     });
   
-    const selectTargetPos = targetRect.left - dateWrap.getBoundingClientRect().left + e.target.offsetWidth / 2;
-  
-    if (selectTargetPos <= boxHalf) {
-      // left
-      pos = 0;
-    } else if (listWidth - selectTargetPos <= boxHalf) {
-      // right
-      pos = listWidth - dateWrap.clientWidth;
-    } else {
-      pos = selectTargetPos - boxHalf;
+    //const selectTargetPos = targetRect.left - dateWrap.getBoundingClientRect().left + e.target.offsetWidth / 2;
+    const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
+
+    console.log("타겟 center : " + selectTargetPos);
+    console.log("boxHalf :" + boxHalf);
+    
+    // left
+    if (selectTargetPos < boxHalf) {
+      // pos = 0;
+      pos = dateWrap.getBoundingClientRect().left;
+    // right
+    } else if (selectTargetPos >= boxHalf) {
+      const distance = selectTargetPos - boxHalf;
+      pos += distance;
     }
+
+    
+    console.log("wrap left : " + dateWrap.getBoundingClientRect().left);
+    
+    console.log("pos : " + pos);
+    console.log("--------------");
 
     	// 애니메이션 적용
     setTimeout(function () {
-      dateWrap.style.transform = 'translateX(' + pos * -1 + 'px)';
-      dateWrap.style.transitionDuration = '500ms';
+      swiperWrapper.style.transform = 'translateX(' + pos * -1 + 'px)';
+      swiperWrapper.style.transitionDuration = '500ms';
     }, 200);
 
     // https://codepen.io/henny1105/pen/wvOyoWJ
-
-    console.log(targetRect)
   }
   
   //날짜 비활성화
