@@ -127,41 +127,40 @@ function App() {
 
     const dateWrap = document.querySelector('.date_wrap');
     const swiperWrapper = document.querySelector('.date_wrap .swiper-wrapper');
+    const swiperWrapperLeft = swiperWrapper.getBoundingClientRect().left - 20;
+    const swiperWrapperRight = swiperWrapper.getBoundingClientRect().right + 20;
+
     const targetRect = e.target.getBoundingClientRect();
     const boxHalf = dateWrap.clientWidth / 2;
-    let listWidth = 0;
+    
+    //let listWidth = 0;
+    // document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
+    //   listWidth += slide.offsetWidth;
+    // });
 
-    document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
-      listWidth += slide.offsetWidth;
-    });
-  
-    //const selectTargetPos = targetRect.left - dateWrap.getBoundingClientRect().left + e.target.offsetWidth / 2;
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
 
-    console.log("타겟 center : " + selectTargetPos);
-    console.log("boxHalf :" + boxHalf);
-    
-    // left
-    if (selectTargetPos < boxHalf) {
-      // pos = 0;
-      pos = dateWrap.getBoundingClientRect().left;
-    // right
-    } else if (selectTargetPos >= boxHalf) {
-      const distance = selectTargetPos - boxHalf;
-      pos += distance;
+    console.log(boxHalf - selectTargetPos);
+
+    if (boxHalf - selectTargetPos < dateWrap.offsetWidth*0.2) {
+      pos += selectTargetPos - boxHalf;
     }
-
     
-    console.log("wrap left : " + dateWrap.getBoundingClientRect().left);
-    
-    console.log("pos : " + pos);
-    console.log("--------------");
+    // // left
+    // if (selectTargetPos < boxHalf) {
+    //   // pos = 0;
+    //   pos = dateWrap.getBoundingClientRect().left;
+    // // right
+    // } else if (selectTargetPos >= boxHalf) {
+    //   pos += selectTargetPos - boxHalf;
+    // }
 
-    	// 애니메이션 적용
-    setTimeout(function () {
-      swiperWrapper.style.transform = 'translateX(' + pos * -1 + 'px)';
-      swiperWrapper.style.transitionDuration = '500ms';
-    }, 200);
+
+    // 애니메이션 적용
+    // setTimeout(function () {
+    //   swiperWrapper.style.transform = 'translateX(' + pos * -1 + 'px)';
+    //   swiperWrapper.style.transitionDuration = '500ms';
+    // }, 200);
 
     // https://codepen.io/henny1105/pen/wvOyoWJ
   }
