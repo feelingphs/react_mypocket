@@ -140,29 +140,34 @@ function App() {
 
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
 
-    console.log(boxHalf - selectTargetPos);
+    console.log("1 : " + dateWrap.getBoundingClientRect().left);
+    console.log("2 : " + swiperWrapperLeft);
 
-    if (boxHalf - selectTargetPos < dateWrap.offsetWidth*0.2) {
-      pos += selectTargetPos - boxHalf;
+    if(dateWrap.getBoundingClientRect().left === swiperWrapperLeft) {
+      console.log(1);
+      pos = swiperWrapperLeft;
+      // if (boxHalf - selectTargetPos > dateWrap.offsetWidth*0.2) {
+      //   pos += selectTargetPos - boxHalf;
+      // } else 
+      if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.2) {
+        pos += selectTargetPos - boxHalf;
+      }
+    } else if (dateWrap.getBoundingClientRect().right === swiperWrapperRight) {
+      pos = swiperWrapperRight;
+      if (boxHalf - selectTargetPos > dateWrap.offsetWidth*0.2) {
+        pos += selectTargetPos - boxHalf;
+      }
+      //  else if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.2) {
+      //   pos += selectTargetPos - boxHalf;
+      // }
     }
-    
-    // // left
-    // if (selectTargetPos < boxHalf) {
-    //   // pos = 0;
-    //   pos = dateWrap.getBoundingClientRect().left;
-    // // right
-    // } else if (selectTargetPos >= boxHalf) {
-    //   pos += selectTargetPos - boxHalf;
-    // }
-
 
     // 애니메이션 적용
-    // setTimeout(function () {
-    //   swiperWrapper.style.transform = 'translateX(' + pos * -1 + 'px)';
-    //   swiperWrapper.style.transitionDuration = '500ms';
-    // }, 200);
+    setTimeout(function () {
+      swiperWrapper.style.transform = 'translateX(' + pos * -1 + 'px)';
+      swiperWrapper.style.transitionDuration = '500ms';
+    }, 200);
 
-    // https://codepen.io/henny1105/pen/wvOyoWJ
   }
   
   //날짜 비활성화
