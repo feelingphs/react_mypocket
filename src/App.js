@@ -133,34 +133,31 @@ function App() {
     const targetRect = e.target.getBoundingClientRect();
     const boxHalf = dateWrap.clientWidth / 2;
     
-    //let listWidth = 0;
-    // document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
-    //   listWidth += slide.offsetWidth;
-    // });
+    let listWidth = 0;
+    document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
+      listWidth += slide.offsetWidth;
+    });
 
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
 
-    console.log("1 : " + dateWrap.getBoundingClientRect().left);
-    console.log("2 : " + swiperWrapperLeft);
+    //console.log(targetRect.left - swiperWrapperLeft);
+    console.log(pos);
 
-    if(dateWrap.getBoundingClientRect().left === swiperWrapperLeft) {
-      console.log(1);
-      pos = swiperWrapperLeft;
-      // if (boxHalf - selectTargetPos > dateWrap.offsetWidth*0.2) {
-      //   pos += selectTargetPos - boxHalf;
-      // } else 
-      if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.2) {
+    if (Math.abs(selectTargetPos - boxHalf) > dateWrap.offsetWidth*0.25) {
+      // left
+      if(targetRect.left - swiperWrapperLeft < 160) {
+        pos = 0;
+      } else if(swiperWrapperRight + listWidth - targetRect.right < 160) {
+        pos += listWidth - targetRect.right;
+        console.log(2)
+      // 가운데 날짜 선택시
+      } else {
         pos += selectTargetPos - boxHalf;
       }
-    } else if (dateWrap.getBoundingClientRect().right === swiperWrapperRight) {
-      pos = swiperWrapperRight;
-      if (boxHalf - selectTargetPos > dateWrap.offsetWidth*0.2) {
-        pos += selectTargetPos - boxHalf;
-      }
-      //  else if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.2) {
-      //   pos += selectTargetPos - boxHalf;
-      // }
     }
+
+    console.log(pos);
+    console.log("---");
 
     // 애니메이션 적용
     setTimeout(function () {
