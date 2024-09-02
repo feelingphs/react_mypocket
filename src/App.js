@@ -135,26 +135,33 @@ function App() {
     
     let listWidth = 0;
     document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
-      listWidth += slide.offsetWidth;
+      listWidth += slide.offsetWidth + 16;
     });
 
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
 
     //console.log(targetRect.left - swiperWrapperLeft);
-    console.log(pos);
+    console.log("listWidth : " + listWidth)
+    console.log("dateWrap.clientWidth : " + dateWrap.clientWidth)
+    console.log("swiperWrapperLeft : " + swiperWrapperLeft);
 
     if (Math.abs(selectTargetPos - boxHalf) > dateWrap.offsetWidth*0.25) {
       // left
-      if(targetRect.left - swiperWrapperLeft < 160) {
+      if(targetRect.left - swiperWrapperLeft < 100) {
         pos = 0;
-      } else if(swiperWrapperRight + listWidth - targetRect.right < 160) {
-        pos += listWidth - targetRect.right;
+        console.log(1)
+      // right
+      } else if(listWidth - dateWrap.clientWidth + swiperWrapperLeft < 50) {
+        pos = 1012;
         console.log(2)
       // 가운데 날짜 선택시
       } else {
         pos += selectTargetPos - boxHalf;
+        console.log(3)
       }
     }
+
+
 
     console.log(pos);
     console.log("---");
