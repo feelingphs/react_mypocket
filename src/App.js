@@ -122,7 +122,7 @@ function App() {
   const handleClickButton = e => {
     //const { name } = e.target
     removeActive();
-    e.target.classList.add('on')
+    e.currentTarget.querySelector('.date').classList.add('on')
     //setPocketList(name)
 
     const dateWrap = document.querySelector('.date_wrap');
@@ -139,28 +139,34 @@ function App() {
     });
 
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
+    const extraLeft = targetRect.left - swiperWrapperLeft;
+    const extraRight = listWidth - dateWrap.clientWidth + swiperWrapperLeft;
 
-    //console.log(targetRect.left - swiperWrapperLeft);
     console.log("listWidth : " + listWidth)
     console.log("dateWrap.clientWidth : " + dateWrap.clientWidth)
     console.log("swiperWrapperLeft : " + swiperWrapperLeft);
-    console.log(listWidth - dateWrap.clientWidth + swiperWrapperLeft);
+    console.log("extraRight : " + extraRight);
 
-    if (Math.abs(selectTargetPos - boxHalf) > dateWrap.offsetWidth*0.25) {
-      // left
-      if(targetRect.left - swiperWrapperLeft < 100) {
-        pos = 0;
-        console.log(1)
-      // right
-      } else if(listWidth - dateWrap.clientWidth + swiperWrapperLeft < 50) {
-        pos = 1012;
-        console.log(2)
-      // 바깥쪽 날짜 선택시
-      } else {
-        pos += selectTargetPos - boxHalf;
-        console.log(3)
-      }
+    console.log(selectTargetPos - boxHalf);
+
+    // right
+    // if(extraRight > -100 && extraRight < 200) {
+    //   pos = listWidth - dateWrap.clientWidth + 20;
+    //   console.log("오른쪽")
+    // }
+
+    // 바깥쪽 날짜 선택시
+    if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.25) {
+      pos += selectTargetPos - boxHalf;
     }
+
+    // left
+    // if(extraLeft > -100 && extraLeft < 200) {
+    //   pos = 0;
+    //   console.log("왼쪽")
+    // }
+
+
 
 
 
