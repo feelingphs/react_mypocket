@@ -144,6 +144,7 @@ function App() {
     console.log("listWidth : " + listWidth)
     console.log("dateWrap.clientWidth : " + dateWrap.clientWidth)
     console.log("swiperWrapperLeft : " + swiperWrapperLeft);
+    console.log(listWidth - dateWrap.clientWidth + swiperWrapperLeft);
 
     if (Math.abs(selectTargetPos - boxHalf) > dateWrap.offsetWidth*0.25) {
       // left
@@ -154,7 +155,7 @@ function App() {
       } else if(listWidth - dateWrap.clientWidth + swiperWrapperLeft < 50) {
         pos = 1012;
         console.log(2)
-      // 가운데 날짜 선택시
+      // 바깥쪽 날짜 선택시
       } else {
         pos += selectTargetPos - boxHalf;
         console.log(3)
@@ -163,7 +164,7 @@ function App() {
 
 
 
-    console.log(pos);
+    console.log("pos : " + pos);
     console.log("---");
 
     // 애니메이션 적용
