@@ -133,42 +133,22 @@ function App() {
     const targetRect = e.target.getBoundingClientRect();
     const boxHalf = dateWrap.clientWidth / 2;
     
-    let listWidth = 0;
-    document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
-      listWidth += slide.offsetWidth + 16;
-    });
+    // let listWidth = 0;
+    // document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
+    //   listWidth += slide.offsetWidth + 16;
+    // });
 
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
-    const extraLeft = targetRect.left - swiperWrapperLeft;
-    const extraRight = listWidth - dateWrap.clientWidth + swiperWrapperLeft;
 
-    console.log("listWidth : " + listWidth)
-    console.log("dateWrap.clientWidth : " + dateWrap.clientWidth)
-    console.log("swiperWrapperLeft : " + swiperWrapperLeft);
-    console.log("extraRight : " + extraRight);
-
-    console.log(selectTargetPos - boxHalf);
-
-    // right
-    // if(extraRight > -100 && extraRight < 200) {
-    //   pos = listWidth - dateWrap.clientWidth + 20;
-    //   console.log("오른쪽")
-    // }
-
-    // 바깥쪽 날짜 선택시
+    // 오른쪽 날짜 선택시
     if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.25) {
       pos += selectTargetPos - boxHalf;
     }
 
-    // left
-    // if(extraLeft > -100 && extraLeft < 200) {
-    //   pos = 0;
-    //   console.log("왼쪽")
-    // }
-
-
-
-
+    // 왼쪽 날짜 선택시
+    if (boxHalf - selectTargetPos > dateWrap.offsetWidth*0.25) {
+      pos += selectTargetPos - boxHalf;
+    }
 
     console.log("pos : " + pos);
     console.log("---");
