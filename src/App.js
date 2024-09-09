@@ -126,37 +126,44 @@ function App() {
     //setPocketList(name)
 
     const dateWrap = document.querySelector('.date_wrap');
-    const swiperWrapper = document.querySelector('.date_wrap .swiper-wrapper');
-    const swiperWrapperLeft = swiperWrapper.getBoundingClientRect().left - 20;
-    const swiperWrapperRight = swiperWrapper.getBoundingClientRect().right + 20;
+    const dateList = document.querySelector('.date_wrap .swiper-wrapper');
+    const dateItem = document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide');
+    const dateItemWidth = dateItem[0].clientWidth;
+    const swiperWrapperLeft = dateList.getBoundingClientRect().left - 20;
 
     const targetRect = e.target.getBoundingClientRect();
     const boxHalf = dateWrap.clientWidth / 2;
+
+    console.log(dateItemWidth);
     
-    // let listWidth = 0;
-    // document.querySelectorAll('.date_wrap .swiper-wrapper .swiper-slide').forEach(function (slide) {
-    //   listWidth += slide.offsetWidth + 16;
-    // });
+    let listWidth = 0;
+    dateItem.forEach(function (slide) {
+      listWidth += slide.offsetWidth + 16;
+    });
 
     const selectTargetPos = targetRect.left + e.target.offsetWidth / 2;
 
-    // 오른쪽 날짜 선택시
     if (selectTargetPos - boxHalf > dateWrap.offsetWidth*0.25) {
-      pos += selectTargetPos - boxHalf;
+      if(extraRight > dateItemWidth*(-4) && extraRight < dateItemWidth*4) {
+        pos = listWidth - dateWrap.clientWidth + 20;
+      } else {
+        pos += selectTargetPos - boxHalf;
+      }
     }
 
-    // 왼쪽 날짜 선택시
+    // 바깥쪽 날짜 선택시(왼쪽)
     if (boxHalf - selectTargetPos > dateWrap.offsetWidth*0.25) {
-      pos += selectTargetPos - boxHalf;
+      if(extraLeft > dateItemWidth*(-4) && extraLeft < dateItemWidth*4) {
+        pos = 0;
+      } else {
+        pos += selectTargetPos - boxHalf;
+      }
     }
-
-    console.log("pos : " + pos);
-    console.log("---");
 
     // 애니메이션 적용
     setTimeout(function () {
-      swiperWrapper.style.transform = 'translateX(' + pos * -1 + 'px)';
-      swiperWrapper.style.transitionDuration = '500ms';
+      dateList.style.transform = 'translateX(' + pos * -1 + 'px)';
+      dateList.style.transitionDuration = '500ms';
     }, 200);
 
   }
